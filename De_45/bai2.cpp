@@ -40,12 +40,6 @@ int dem_lucky(TREE &t){
     }
  }
 
-// int dem(TREE t){
-//     if(t){
-//         int d = dem(t->pLeft) + dem(t->pRight) ;
-//         if()
-//     }
-// }
 TNODE *CreateNode(int x){
     TNODE *p = new TNODE;
     if(p==NULL){

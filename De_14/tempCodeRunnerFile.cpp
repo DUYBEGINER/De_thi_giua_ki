@@ -49,22 +49,13 @@ void AddNode(TREE &t, int x){
 
 
 int ucln(int a, int b){
-    if(a==0 || b==0){
-        return a+b;
-    }
-    while(a!=b){
-        if(a>b){
-            a = a-b;
-        }else{
-            b = b-a;
-        }
-    }
-    return a;
+    if(b==0) return a;
+    return ucln(b,a%b);
 }
 
 bool is_friendlyNumber(int n){
     int value = n;
-    int tmp;
+    int tmp = 0;
     int sum = 0;
     while(n>0){
         tmp = n%10;
@@ -87,12 +78,12 @@ void Timthemang(TREE &pHuy, TREE &p){
     }
 }
 
-TNODE* deleteNode(TREE &root, int key) {
+TREE deleteNode(TREE &root, int key) {
     if (root == nullptr) return root;
 
-    if (key < root->key) {
+    if (key < root->Key) {
         root->pLeft = deleteNode(root->pLeft, key);
-    } else if (key > root->key) {
+    } else if (key > root->Key) {
         root->pRight = deleteNode(root->pRight, key);
     } else {
         // Node with only one child or no child
@@ -110,10 +101,10 @@ TNODE* deleteNode(TREE &root, int key) {
         TNODE* temp = findMax(root->pLeft);
 
         // Copy the inorder predecessor's content to this node
-        root->key = temp->key;
+        root->Key = temp->Key;
 
         // Delete the inorder predecessor
-        root->pLeft = deleteNode(root->pLeft, temp->key);
+        root->pLeft = deleteNode(root->pLeft, temp->Key);
     }
     return root;
 }

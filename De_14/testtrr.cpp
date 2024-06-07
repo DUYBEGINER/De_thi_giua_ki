@@ -49,22 +49,13 @@ void AddNode(TREE &t, int x){
 
 
 int ucln(int a, int b){
-    if(a==0 || b==0){
-        return a+b;
-    }
-    while(a!=b){
-        if(a>b){
-            a = a-b;
-        }else{
-            b = b-a;
-        }
-    }
-    return a;
+    if(b==0) return a;
+    return ucln(b,a%b);
 }
 
 bool is_friendlyNumber(int n){
     int value = n;
-    int tmp;
+    int tmp = 0;
     int sum = 0;
     while(n>0){
         tmp = n%10;
@@ -85,37 +76,6 @@ void Timthemang(TREE &pHuy, TREE &p){
         pHuy = p;
         p = p->pRight;
     }
-}
-
-TNODE* deleteNode(TREE &root, int key) {
-    if (root == nullptr) return root;
-
-    if (key < root->key) {
-        root->pLeft = deleteNode(root->pLeft, key);
-    } else if (key > root->key) {
-        root->pRight = deleteNode(root->pRight, key);
-    } else {
-        // Node with only one child or no child
-        if (root->pLeft == nullptr) {
-            TNODE* temp = root->pRight;
-            delete root;
-            return temp;
-        } else if (root->pRight == nullptr) {
-            TNODE* temp = root->pLeft;
-            delete root;
-            return temp;
-        }
-
-        // Node with two children: Get the inorder predecessor (max in the left subtree)
-        TNODE* temp = findMax(root->pLeft);
-
-        // Copy the inorder predecessor's content to this node
-        root->key = temp->key;
-
-        // Delete the inorder predecessor
-        root->pLeft = deleteNode(root->pLeft, temp->key);
-    }
-    return root;
 }
 
 void xoa_Node(TREE &t, int x){
@@ -144,8 +104,12 @@ void ShowList(TREE t){
     }
 }
 void delete_friendlyNumber(TREE &t){
-    if (t != NULL && is_friendlyNumber(t->key)) {
-        
+    if (t != NULL) {
+        while(is_friendlyNumber(t->key)) {
+            //cout<<"Xoa lan: ";
+            xoa_Node(t, t->key);
+            //ShowList(t);
+        }
         delete_friendlyNumber(t->pLeft);
         delete_friendlyNumber(t->pRight);
     }
