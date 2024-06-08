@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ typedef struct TNODE{
     struct TNODE *pRight;
 } *TREE;
 
-int InitTree(TREE &t){
+void InitTree(TREE &t){
     t = NULL;
 }
 
@@ -62,7 +63,8 @@ int ucln(int a, int b){
     return a;
 }
 
-bool is_friendlyNumber(int n){
+//Kiểm tra số thân thiện
+bool is_friendlyNum(int n){
     int value = n;
     int tmp;
     int sum = 0;
@@ -77,6 +79,7 @@ bool is_friendlyNumber(int n){
         return 0;
 }
 
+
 void Timthemang(TREE &pHuy, TREE &p){
     if(p->pLeft){
       Timthemang(pHuy, p->pLeft);  
@@ -87,55 +90,54 @@ void Timthemang(TREE &pHuy, TREE &p){
     }
 }
 
-TNODE* deleteNode(TREE &root, int key) {
-    if (root == nullptr) return root;
-
-    if (key < root->key) {
-        root->pLeft = deleteNode(root->pLeft, key);
-    } else if (key > root->key) {
-        root->pRight = deleteNode(root->pRight, key);
-    } else {
-        // Node with only one child or no child
-        if (root->pLeft == nullptr) {
-            TNODE* temp = root->pRight;
-            delete root;
-            return temp;
-        } else if (root->pRight == nullptr) {
-            TNODE* temp = root->pLeft;
-            delete root;
-            return temp;
-        }
-
-        // Node with two children: Get the inorder predecessor (max in the left subtree)
-        TNODE* temp = findMax(root->pLeft);
-
-        // Copy the inorder predecessor's content to this node
-        root->key = temp->key;
-
-        // Delete the inorder predecessor
-        root->pLeft = deleteNode(root->pLeft, temp->key);
-    }
-    return root;
-}
-
-void xoa_Node(TREE &t, int x){
-    //cout<<"xoa node: "<<t->key;
-    if(t!=NULL){
-            TNODE *pHuy = t;
-            TNODE *parent = t;
-            if(t->pLeft==NULL && t->pRight==NULL){
-                delete pHuy;
-            }else if(t->pLeft==NULL){
-                 t = t->pRight;
+void deleteNode(TREE &T, int key) {
+    if(T == NULL) return;
+    else{
+        if(key < T->key){
+            deleteNode(T->pLeft, key);
+        }else if(key > T->key){
+            deleteNode(T->pRight, key);
+        }else{   // key == T->key
+            TNODE *pHuy = T;  
+            //Nếu như nhanh trái bằng NULL -> đây là cây con phải
+            if(T->pLeft == NULL){
+                T = T->pRight;
+            }else if(T->pRight == NULL){
+                T = T->pLeft;
             }
-            else if(t->pRight==NULL)
-                 t = t->pLeft;
-            else 
-            Timthemang(pHuy,t->pRight);
+            else{
+                TNODE *themang = T->pRight;
+                Timthemang(pHuy,themang);
+            }
             delete pHuy;
-            //pHuy =  NULL;
-    }
+        }
+        }
 }
+
+
+
+// void Search_friendlyNum(TREE T, vector<int> &a){
+//     if(T!=NULL){
+//         if(is_friendlyNum(T->key)){
+//             a.push_back(T->key);
+//         }
+//         Search_friendlyNum(T->pLeft,a);
+//         Search_friendlyNum(T->pRight,a);
+//     }
+// }
+
+void delete_friendlyNumber(TREE &t){
+   if(t!=NULL){
+    if(is_friendlyNum(t->key)){
+           deleteNode(t,t->key);
+       }
+       delete_friendlyNumber(t->pLeft);
+       delete_friendlyNumber(t->pRight);
+       
+   }
+}
+
+
 void ShowList(TREE t){
     if(t!=NULL){
         cout<<t->key<<" ";
@@ -143,19 +145,12 @@ void ShowList(TREE t){
         ShowList(t->pRight);
     }
 }
-void delete_friendlyNumber(TREE &t){
-    if (t != NULL && is_friendlyNumber(t->key)) {
-        
-        delete_friendlyNumber(t->pLeft);
-        delete_friendlyNumber(t->pRight);
-    }
-}
-
 
 int main(){
     TREE T;
     InitTree(T);
     int n,a,b;
+    cout<<"Nhap so luong node:";
     cin>>n;
     while(n>0){
         cin>>a;
@@ -166,11 +161,7 @@ int main(){
     cout<<endl;
     delete_friendlyNumber(T);
     cout<<endl;
-    if(IsEmptyTree(T))
-    cout<<"Empty";
-    else{
-        cout<<"no";
-    }
-    //ShowList(T);
+    ShowList(T);
+
     return 0;
 }

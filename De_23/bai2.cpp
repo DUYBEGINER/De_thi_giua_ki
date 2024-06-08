@@ -32,8 +32,6 @@ bool Check_Armstrong(int n) {
 
 void Xoa_Armstrong(LIST &L) {
     NODE *p = L.pHead, *q;
-    NODE *tmp = new NODE;
-    tmp->pNext = p;
     // Xóa các nút đầu tiên có giá trị là số Armstrong
     while (p != NULL && Check_Armstrong(p->key)) {
         L.pHead = p->pNext;
@@ -52,8 +50,6 @@ void Xoa_Armstrong(LIST &L) {
         }
     }
 }
-
-
 
 void Init(LIST &T){
     T.pHead = NULL;
@@ -87,6 +83,8 @@ void Insert(LIST &T, int x) {
         T.pTail = p;
     }
 }
+
+
 int main(){
     LIST T;
     Init(T);
